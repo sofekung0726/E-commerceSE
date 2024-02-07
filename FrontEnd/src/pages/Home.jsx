@@ -1,9 +1,9 @@
 import React from 'react'
 import Banner from '../components/Banner'
-import Categories from '../components/Categories'
-import SpecialProduct from '../components/SpecialProduct'
-import Testimonials from '../components/Testimonials'
-import OurService from '../components/OurService'
+import Categories from './Categories'
+import SpecialProduct from './SpecialProduct'
+import Testimonials from './Testimonials'
+import OurService from './OurService'
 
 const Home = () => {
   return (
