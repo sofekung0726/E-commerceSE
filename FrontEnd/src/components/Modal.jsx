@@ -6,27 +6,42 @@ import { AuthContext } from '../context/AuthProvider';
 
 
 const Modal = ({ name }) => {
-    const {login} = useContext(AuthContext)
+    const { login , signUpWithGoogle} = useContext(AuthContext)
     const {
         register,
         handleSubmit,
         watch,
         formState: { errors },
-      } = useForm()
+    } = useForm()
 
-      const onSubmit = (data) => {
-        login(data.email , data.password).then(
+    const onSubmit = (data) => {
+        login(data.email, data.password).then(
             (result) => {
                 // Signed in 
                 const user = result.user;
                 console.log(user);
                 alert("Login success")
-              })
-              .catch((error) => {
+            })
+            .catch((error) => {
                 console.log(error);
-              }
-        ) 
-      }
+            }
+            )
+    }
+
+    const googleSigUp = () => {
+        signUpWithGoogle().then(
+            (result) => {
+                // Signed in with google
+                const user = result.user;
+                console.log(user);
+                alert("Google SignUp Success")
+                document.getElementById("login").close()
+            })
+            .catch((error) => {
+                console.log(error);
+            }
+            )
+    }
     return (
         <dialog id={name} className="modal">
             <div className="modal-box">
@@ -37,7 +52,7 @@ const Modal = ({ name }) => {
                             <span className="label-text">Email</span>
                         </label>
                         <input type="email" placeholder="email" className="input input-bordered" required
-                        {...register("email")}
+                            {...register("email")}
                         />
                     </div>
                     <div className="form-control">
@@ -45,7 +60,7 @@ const Modal = ({ name }) => {
                             <span className="label-text">Password</span>
                         </label>
                         <input type="password" placeholder="password" className="input input-bordered" required
-                        {...register("password")}
+                            {...register("password")}
                         />
                         <label className="label">
                             <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
@@ -67,7 +82,7 @@ const Modal = ({ name }) => {
                     </button>
                 </form>
                 <div className='text-center space-x-3 mb-3'>
-                    <button className="btn btn-circle btn-ghost hover:bg-red hover:text-white">
+                    <button onClick={googleSigUp} className="btn btn-circle btn-ghost hover:bg-red hover:text-white">
                         <FaGooglePlusG />
                     </button>
                     <button className="btn btn-circle btn-ghost hover:bg-red hover:text-white">
