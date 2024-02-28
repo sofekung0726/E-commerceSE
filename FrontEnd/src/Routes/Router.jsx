@@ -5,6 +5,8 @@ import Home from '../pages/home/Home';
 import ProductList from '../pages/shop/ProductList';
 import SignUp from '../components/SignUp';
 import Signin from '../components/Signin';
+import UpdateProfile from '../pages/dashboard/UpdateProfile';
+import ProtectedRoute from '../pages/Routes/ProtectRoute';
 
 const router = createBrowserRouter([
     {
@@ -17,7 +19,15 @@ const router = createBrowserRouter([
         },
         {
             path: "/shop",
-            element: <ProductList/>
+            element: <ProtectedRoute> <ProductList/> </ProtectedRoute>
+        },
+        {
+            path: "/update-profile",
+            element: <UpdateProfile/>
+        },
+        {
+          path:"/signin",
+          element:<Signin/>
         }
       ]
     },
@@ -25,10 +35,7 @@ const router = createBrowserRouter([
       path:"/signup",
       element:<SignUp/>
     },
-    {
-      path:"/signin",
-      element:<Signin/>
-    }
+    
   ]);
 
 

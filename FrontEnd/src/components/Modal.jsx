@@ -1,11 +1,14 @@
 import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { FaGooglePlusG, FaFacebookF, FaGithub } from "react-icons/fa";
 import { useForm } from "react-hook-form"
 import { AuthContext } from '../context/AuthProvider';
 
 
 const Modal = ({ name }) => {
+    const location = useLocation()
+    const navigate = useNavigate()
+    const from = location?.state?.from?.pathname || "/";
     const { login , signUpWithGoogle} = useContext(AuthContext)
     const {
         register,
@@ -19,8 +22,10 @@ const Modal = ({ name }) => {
             (result) => {
                 // Signed in 
                 const user = result.user;
-                console.log(user);
+                // console.log(user);
                 alert("Login success")
+                document.getElementById(name).close()
+                navigate(from, { replace: true })
             })
             .catch((error) => {
                 console.log(error);
@@ -33,7 +38,7 @@ const Modal = ({ name }) => {
             (result) => {
                 // Signed in with google
                 const user = result.user;
-                console.log(user);
+                // console.log(user);
                 alert("Google SignUp Success")
                 document.getElementById("login").close()
             })
@@ -45,6 +50,7 @@ const Modal = ({ name }) => {
     return (
         <dialog id={name} className="modal">
             <div className="modal-box">
+            <div className='modal-action mt-0 flex flex-col justify-center '>
                 <form className="card-body flex flex-col justify-center text-center" onSubmit={handleSubmit(onSubmit)}>
                     <h3 className="font-bold text-lg ">Please Login!</h3>
                     <div className="form-control">
@@ -91,6 +97,7 @@ const Modal = ({ name }) => {
                     <button className="btn btn-circle btn-ghost hover:bg-red hover:text-white">
                         <FaGithub />
                     </button>
+                </div>
                 </div>
             </div>
         </dialog>
