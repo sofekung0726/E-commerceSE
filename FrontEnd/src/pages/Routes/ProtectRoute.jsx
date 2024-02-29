@@ -6,8 +6,10 @@ const ProtectedRoute = ({children}) =>{
     const {user} = useContext(AuthContext);
     const location = useLocation();
     if (user) {
+        console.log(user);
         return children;
     }
+  
     return <Navigate to="/signin" state={{from:location}} replace/>
 }
 export default ProtectedRoute;
