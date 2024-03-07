@@ -3,6 +3,7 @@ const cors = require("cors")
 const dotenv = require("dotenv")
 const mongoose = require("mongoose");
 const ProductRouter = require("./routes/productrouter")
+const CartRouter = require("./routes/cartrouter")
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
@@ -57,7 +58,7 @@ app.get("/", (req, res) => {
   res.send("<h1> Welcome to restful API Blog</h1>");
 });
 app.use("/products", ProductRouter)
-
+app.use("/carts", CartRouter)
 const PORT = process.env.PORT;
 const server = app.listen(PORT, () => {
   console.log("Server is running on http://localhost:" + PORT);
