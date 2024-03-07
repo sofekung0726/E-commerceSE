@@ -41,6 +41,25 @@ const express = require("express");
 const router = express.Router();
 const CartModel = require("../models/Cart.model");
 
+/**
+ * @swagger
+ * /carts:
+ *   get:
+ *     summary: Retrieve  a list  of  cart
+ *     tags: [Cart]
+ *     responses:
+ *       200:
+ *         description: A list of users.
+ *         content:
+ *              application/json:
+ *                schema:
+ *                      type: array
+ *                      items:
+ *                            $ref: '#/components/schemas/Cart'
+ *       500:
+ *         description: Some  error happened
+ */
+
 router.get("/", async (req, res) => {
   try {
     const cart = await CartModel.find();
@@ -50,9 +69,38 @@ router.get("/", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /carts/{email}:
+ *   get:
+ *     summary: Get item in cart by  email
+ *     tags: [Cart]
+ *     parameters:
+ *          -   in: path
+ *              name: email
+ *              required: true
+ *              schema:
+ *                  type: string
+ *              description:  The email
+ *     responses:
+ *       200:
+ *         description: The cart by  email.
+ *         content:
+ *              application/json:
+ *                schema:
+ *                      type: array
+ *                      items:
+ *                            $ref: '#/components/schemas/Cart'
+ *       404:
+ *         description: Product Not Found  
+ *       500:
+ *         description: Some  error happened
+ */
+
 router.get("/:email", async (req, res) => {
+
   try {
-    const cart = await CartModel.findById({ email });
+    const cart = await CartModel.findOne({ email : req.params.email });
     if (!cart) {
       return res.status(404).json({ message: "Product Not Found" });
     }
@@ -61,6 +109,28 @@ router.get("/:email", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+/**
+ * @swagger
+ * /carts:
+ *   post:
+ *     summary: Create  new item in cart
+ *     tags: [Cart]
+ *     requestBody:
+ *       required:  true
+ *       content:
+ *         application/json:
+ *                schema:
+ *                    $ref: '#/components/schemas/Cart'
+ *     responses:
+ *       201:
+ *         description: The item cart is created.
+ *         content:
+ *              application/json:
+ *                schema:
+ *                      $ref: '#/components/schemas/Cart'
+ *       500:
+ *         description: Some  error happened
+ */
 
 router.post("/", async (req, res) => {
     const cart = req.body;
@@ -84,6 +154,38 @@ router.post("/", async (req, res) => {
     }
 });
 
+/**
+ * @swagger
+ * /carts/{id}:
+ *   put:
+ *     summary: Update cart
+ *     tags: [Cart]
+ *     parameters:
+ *          -   in: path
+ *              name: id
+ *              required: true
+ *              schema:
+ *                  type: string
+ *              description:  The cart Id
+ *     requestBody:
+ *       required:  true
+ *       content:
+ *         application/json:
+ *                schema:
+ *                    $ref: '#/components/schemas/Cart'
+ *     responses:
+ *       201:
+ *         description: The cart by  Id.
+ *         content:
+ *              application/json:
+ *                schema:
+ *                      $ref: '#/components/schemas/Cart'
+ *       404:
+ *         description: Cart Not Found  
+ *       500:
+ *         description: Some  error happened
+ */
+
 router.put("/:id" , async (req,res) => {
     const {id} = req.params.id
     const newProduct = req.body
@@ -97,6 +199,31 @@ router.put("/:id" , async (req,res) => {
       res.status(500).json({message:error.message})
     }
   })
+ /**
+ * @swagger
+ * /carts/{id}:
+ *   delete:
+ *     summary: Delete cart
+ *     tags: [Cart]
+ *     parameters:
+ *          -   in: path
+ *              name: id
+ *              required: true
+ *              schema:
+ *                  type: string
+ *              description:  The cart Id
+ *     responses:
+ *       200:
+ *         description: The Cart is  delete.
+ *         content:
+ *              application/json:
+ *                schema:
+ *                      $ref: '#/components/schemas/Cart'
+ *       404:
+ *         description: Cart Not Found  
+ *       500:
+ *         description: Some  error happened
+ */
 
   router.delete("/:id" , async (req,res) => {
     try {
@@ -109,6 +236,32 @@ router.put("/:id" , async (req,res) => {
       res.status(500).json({message:error.message})
     }
   })
+ /**
+ * @swagger
+ * /carts/clear/{email}:
+ *   delete:
+ *     summary: Delete cart
+ *     tags: [Cart]
+ *     parameters:
+ *          -   in: path
+ *              name: email
+ *              required: true
+ *              schema:
+ *                  type: string
+ *              description:  The cart Id
+ *     responses:
+ *       200:
+ *         description: The Cart is  delete.
+ *         content:
+ *              application/json:
+ *                schema:
+ *                      $ref: '#/components/schemas/Cart'
+ *       404:
+ *         description: Cart Not Found  
+ *       500:
+ *         description: Some  error happened
+ */
+
   router.delete("/clear/:email", async (req, res) => {
     const { email } = req.params;
 
