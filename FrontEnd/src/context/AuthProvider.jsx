@@ -6,6 +6,9 @@ export const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   // Initialize Firebase Authentication and get a reference to the service
   const auth = getAuth(app);
+  const [reload, setReload] = useState(false);
+  const [user, setUser] = useState(null)
+
 
 
   const createUser = (email, password) => {
@@ -28,7 +31,6 @@ const AuthProvider = ({ children }) => {
     })
   }
  
-  const [user, setUser] = useState(null)
   const authInfo = {
     user,
     setUser,
@@ -37,6 +39,8 @@ const AuthProvider = ({ children }) => {
     logout,
     signUpWithGoogle,
     updateUserProfile,
+    setReload,
+    reload
   
 
   }

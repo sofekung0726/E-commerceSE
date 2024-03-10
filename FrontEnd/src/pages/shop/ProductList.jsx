@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Card from '../../components/Card'
+import axios from 'axios'
+
 
 const ProductList = () => {
   const [products, setProduct] = useState([])
@@ -12,8 +14,8 @@ const ProductList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/product.json")
-        const data = await response.json()
+        const response = await axios("http://localhost:4000/products" , {})
+        const data = await response.data
         setProduct(data)
         setFilteredItems(data)
         setCategories(["all", ...new Set(data.map((item) => item.category))])
@@ -24,6 +26,8 @@ const ProductList = () => {
     }
     fetchData();
   }, [])
+
+  
 
   const filterItems = (category) => {
     const filtered = category === "all" ? products : products.filter((item) => item.category === category)
@@ -60,7 +64,6 @@ const ProductList = () => {
 
   const indexOfLastItem = itemPerPage * currentPage;
   const indexOfFirstItem = indexOfLastItem - itemPerPage;
-
   const currentItems = filteredItems.slice(indexOfFirstItem , indexOfLastItem) 
   const paginate = (pageNumber) => setCurrentPage(pageNumber)
   

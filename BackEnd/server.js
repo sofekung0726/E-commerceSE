@@ -33,6 +33,10 @@ const swaggerDefinition = {
       url: 'https://github.com/sofekung0726',
     },
   },
+  externalDocs: {
+    description:"Download Swagger.json",
+    url:"/swagger.json",
+  },
   servers: [
     {
       url: 'http://localhost:4000',
@@ -54,6 +58,10 @@ mongoose.connect(MONGODB_URL);
 
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.get("/swagger.json" , (req,res) => {
+  res.header("Content-Type", "application/json")
+  res.send(swaggerSpec)
+})
 app.get("/", (req, res) => {
   res.send("<h1> Welcome to restful API Blog</h1>");
 });
