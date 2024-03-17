@@ -3,12 +3,15 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { AuthContext } from "../context/AuthProvider";
+import useCart from "../hooks/useCart";
+
 
 const Card = ({ item }) => {
     const url = "http://localhost:4000"
   const { _id, name, image, price, description } = item;
   const { user } = useContext(AuthContext);
   const [isHeartFailed, setIsHeartFiled] = useState(false);
+  const [cart , refetch] = useCart();
   const handleHeartClick = () => {
     setIsHeartFiled(!isHeartFailed);
   };
@@ -24,9 +27,10 @@ const Card = ({ item }) => {
       };
       
       try {
-        axios.post(`${url}/carts`,cartItemObject ).then(response  => {
+        axios.post(`${url}/carts`,cartItemObject ).then((response ) => {
         
             if (response.status === 200 || response.status === 201) {
+              refetch();
                 Swal.fire({
                     title: "Product added to cart",
                     icon: "success",
@@ -39,8 +43,9 @@ const Card = ({ item }) => {
            
         })
       } catch (error) {
+        const errorMessage = error.response.message;
         Swal.fire({
-            title: "Product can't added to cart",
+            title:`${errorMessage}`,
             icon: "error",
             showConfirmButton: false,
             timer: "1500",

@@ -100,7 +100,7 @@ const ProductList = () => {
                   className={`
                         ${
                           selectedCategory === category ? "active" : ""
-                        } py-4 py-2 rounded-full`}
+                        } px-4 py-2 rounded-full`}
                 >
                   <p className="capitalize">{category}</p>
                 </button>

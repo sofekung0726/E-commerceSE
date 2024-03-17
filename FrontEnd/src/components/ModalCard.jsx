@@ -3,8 +3,9 @@ import { AuthContext } from '../context/AuthProvider'
 import { AiOutlineClose, AiOutlineDelete } from "react-icons/ai";
 import { FiPlus, FiMinus } from "react-icons/fi";
 import axios from 'axios'
+import useCart from '../hooks/useCart';
 const ModalCard = ({ name, reload, totalQuantity, setTotalQuantity }) => {
-
+const [cart , refetch] = useCart()
 const {user , setReload} = useContext(AuthContext)
 const [dataCart , setDataCart] = useState([])
 const [dataProduct , setDataProduct] = useState([])
@@ -21,6 +22,7 @@ useEffect(() => {
         );
         const data = await response.data;
         console.log(data);
+        
         setDataCart(data);
 
         const productDataPromises = data.map(async (cartItem) => {
@@ -28,10 +30,12 @@ useEffect(() => {
           const productResponse = await axios.get(
             `http://localhost:4000/products/${cartItem.productId}`
           );
+    
           return productResponse.data;
         });
       
         const productDataResults = await Promise.all(productDataPromises);
+ 
         setDataProduct(productDataResults);
 
         
@@ -41,16 +45,19 @@ useEffect(() => {
         const totalCashInCart = data.reduce((Bath , item) => Bath + item.price * item.quantity, 0);
         setTotalCash(totalCashInCart);
         
-        if (response.status === 200) {
+        if (response.status === 200 ||response.status === 201) {
           setNodata(false);
+          refetch()
         }
+      
       } catch (error) {
         setNodata(true);
         console.log(error);
       }
     };
     fetchData();
-  }, [user ,reload, totalCash]);
+   
+  }, [user ,reload, ,totalCash]);
 
   const closeModal = () => {
     const modal = document.getElementById(name);
@@ -68,7 +75,8 @@ useEffect(() => {
     };
     try {
       await axios.post(`http://localhost:4000/carts`, cartObjects);
-      setReload(true);
+      refetch()
+      // setReload(true);
     } catch (error) {
       console.log(error);
     }
@@ -90,6 +98,7 @@ useEffect(() => {
           `http://localhost:4000/carts/${cartItem._id}`,
           cartObjects
         );
+        refetch()
         setReload(true);
       } else {
         console.log("Cannot DecreaseQuantity");
@@ -103,6 +112,7 @@ useEffect(() => {
     try {
       await axios.delete(`http://localhost:4000/carts/${cartItem._id}`);
       const total = totalQuantity - cartItem.quantity;
+      refetch()
       setTotalQuantity(total);
       setReload(true);
     } catch (error) {
@@ -113,7 +123,9 @@ useEffect(() => {
   const handleClearAll = async (user) => {
     try {
       await axios.delete(`http://localhost:4000/carts/clear/${user.email}`);
+      
       setTotalQuantity(0);
+      refetch()
       setReload(true);
     } catch (error) {
       console.log(error);
@@ -180,7 +192,7 @@ useEffect(() => {
             ))}
             {/* ข้อมูลรายละเอียดเพิ่มเติม */}
               <div className="flex p-4 items-center">
-                <p>Name : {randomOneCary.name}</p>
+                <p>Name : {user.displayName}</p>
                 <p className="ml-auto">{totalQuantity} รายการ</p>
               </div>
               <div className="flex p-4 items-center">

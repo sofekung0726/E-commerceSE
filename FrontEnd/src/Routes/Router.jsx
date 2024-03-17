@@ -7,7 +7,8 @@ import SignUp from '../components/SignUp';
 import Signin from '../components/Signin';
 import UpdateProfile from '../pages/dashboard/UpdateProfile';
 import ProtectedRoute from '../pages/Routes/ProtectRoute';
-
+import Admin from "../pages/admin/dashbord"
+import addProduct from '../pages/admin/addProduct';
 const router = createBrowserRouter([
     {
       path: "/",
@@ -34,6 +35,16 @@ const router = createBrowserRouter([
     {
       path:"/signup",
       element:<SignUp/>
+    },
+    {
+      path: "/dashbord",
+      element: <Admin />,
+      children:[
+      //  {
+      //   path: "/addProduct",
+      //   element:<addProduct/>
+      //  }
+      ]
     },
     
   ]);
