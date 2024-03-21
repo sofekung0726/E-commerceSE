@@ -38,7 +38,7 @@ const Admin = () => {
               </button>
           </div>
           <div className=""> 
-            Content
+            
             <Outlet/>
           </div>
           </div>

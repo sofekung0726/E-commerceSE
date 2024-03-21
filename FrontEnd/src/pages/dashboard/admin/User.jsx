@@ -24,8 +24,15 @@ const User = () => {
               });
             
            
+        }).catch(()=> {
+            const errorStatus = error?.response?.status
+            const errorMessage = error?.response?.message
+            Swal.fire({
+                title: `${errorStatus} - ${errorMessage}` ,
+                icon: "error",
+               
+              });
         })
-
     }axiosSecure.patch(`/users/admin/${user._id}`).then(()=>{
         refetch();
         Swal.fire({
@@ -37,6 +44,28 @@ const User = () => {
     })
     
   }
+  const handleDeleteUser = (user) => {
+    Swal.fire({
+      title:"Are you Sure",
+      text:"You want to delete this "+ `${user.name}` + "user?",
+      icon:"warning",
+      showCancelButton:true,
+      showConfirmButton:true,
+      confirmButtonText:"Delete"
+    }).then((result)=> {
+      if (result.isConfirmed) {
+        axiosSecure.delete(`/users/${user._id}`).then((res)=> {
+          refetch()
+          Swal.fire({
+            title: "Deleted!",
+            text:`${res.data.name} has deleted!`,
+            icon: "success",
+           
+          });
+        })
+      }
+    })
+  }
   return (
     <div>
       <div className=" flex justify-between mx-4 my-4">
@@ -45,7 +74,7 @@ const User = () => {
       </div>
       <div>
         <div className="overflow-x-auto">
-          <table className="table table-zebra md:w-[870]">
+          <table className="table table-zebra md:w-[870px]">
             {/* head */}
             <thead className="bg-red text-white text-center">
               <tr>
@@ -59,7 +88,7 @@ const User = () => {
               </tr>
             </thead>
             
-            <tbody>
+            <tbody className=" text-center">
               {/* row 1 */}
              
               {users.map((user, index) => (
@@ -72,7 +101,7 @@ const User = () => {
                       <div className="avatar">
                         <div className="mask mask-squircle w-12 h-12">
                           <img
-                            src={users.photoURL}
+                            src={user.photoURL}
                             alt="Avatar Tailwind CSS Component"
                           />
                         </div>
@@ -94,13 +123,13 @@ const User = () => {
                     Admin
                   </td>
                   <th>
-                    <button className="btn btn-ghost btn-xs"><FaTrash/></button>
+                    <button className="btn btn-ghost btn-xs"  onClick={() => handleDeleteUser(user)}><FaTrash/></button>
                   </th>
                 </tr>
               ))}
             </tbody>
             {/* foot */}
-            <tfoot>
+            <tfoot className="bg-red text-white text-center">
               <tr>
                 <th></th>
                 <th>Name</th>

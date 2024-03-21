@@ -26,7 +26,7 @@ const Modal = ({ nameModal }) => {
         const user = result.user;
         // console.log(user);
         alert("Login success");
-        document.getElementById(name).close();
+        document.getElementById(nameModal).close();
         navigate(from, { replace: true });
       })
       .catch((error) => {
