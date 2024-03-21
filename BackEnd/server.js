@@ -4,10 +4,11 @@ const dotenv = require("dotenv")
 const mongoose = require("mongoose");
 const ProductRouter = require("./routes/productrouter")
 const CartRouter = require("./routes/cartrouter")
+const UserRouter = require("./routes/user.router")
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-
-
+const jwt = require("jsonwebtoken")
+const cookieParser = require("cookie-parser")
 require("dotenv").config();
 
 const app = express();
@@ -67,6 +68,16 @@ app.get("/", (req, res) => {
 });
 app.use("/products", ProductRouter)
 app.use("/carts", CartRouter)
+app.use("/users" , UserRouter)
+
+// in jwt is not sensitive data
+const secret = process.env.ACCESS_TOKEN_SECRET
+app.post ("/jwt" , (req,res) => {
+  const user = req.body
+  const token = jwt.sign(user ,secret ,{expiresIn :"1h"} )
+  console.log(token);
+  res.send({token})
+})
 const PORT = process.env.PORT;
 const server = app.listen(PORT, () => {
   console.log("Server is running on http://localhost:" + PORT);

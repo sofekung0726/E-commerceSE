@@ -9,7 +9,7 @@ const Admin = () => {
     <div>
       <Admin />
       <Outlet />
-      <footer><Footer /></footer>
+      <Footer />
     </div>
   );
 };

@@ -7,8 +7,10 @@ import SignUp from '../components/SignUp';
 import Signin from '../components/Signin';
 import UpdateProfile from '../pages/dashboard/UpdateProfile';
 import ProtectedRoute from '../pages/Routes/ProtectRoute';
-import Admin from "../pages/admin/dashbord"
-import addProduct from '../pages/admin/addProduct';
+import Admin from "../pages/dashboard/dashbord"
+import addProduct from '../pages/dashboard/addProduct';
+import adminRoute from '../pages/Routes/adminRoute';
+import User from '../pages/dashboard/admin/User';
 const router = createBrowserRouter([
     {
       path: "/",
@@ -37,13 +39,17 @@ const router = createBrowserRouter([
       element:<SignUp/>
     },
     {
-      path: "/dashbord",
-      element: <Admin />,
+      path: "dashboard",
+      element:<ProtectedRoute> <Admin /> </ProtectedRoute>,
       children:[
-      //  {
-      //   path: "/addProduct",
-      //   element:<addProduct/>
-      //  }
+       {
+        path: "users" ,
+        element: <User/>
+       },
+       {
+        path:"",
+        element:<dashborad/>
+       }
       ]
     },
     

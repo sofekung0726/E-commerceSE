@@ -194,7 +194,7 @@ const Navbar = () => {
               </button>
             )}
           </div>
-          <Modal name={"login"} />
+          <Modal nameModal={"login"} />
           <ModalCard name={"carts"} setTotalQuantity={setTotalQuantity} totalQuantity={totalQuantity} reload={reload} setReload={setReload}/>
         </div>
       </div>

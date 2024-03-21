@@ -3,12 +3,15 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FaGooglePlusG, FaFacebookF, FaGithub } from "react-icons/fa";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../context/AuthProvider";
+import useAxios from '../hooks/useAxiosPublic';
+import useAuth from '../hooks/useAuth';
 
-const Modal = ({ name }) => {
+const Modal = ({ nameModal }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const from = location?.state?.from?.pathname || "/";
-  const { login, signUpWithGoogle } = useContext(AuthContext);
+  const axiosPublic = useAxios()
+  const {login ,signUpWithGoogle} = useAuth() 
   const {
     register,
     handleSubmit,
@@ -34,10 +37,23 @@ const Modal = ({ name }) => {
   const googleSigUp = () => {
     signUpWithGoogle()
       .then((result) => {
-        // Signed in with google
         const user = result.user;
-        // console.log(user);
-        alert("Google SignUp Success");
+            const userInfo = {
+                name: result.user?.displayName,
+                email: result.user?.email,
+                photoURL: result.user?.photoURL,
+            }
+            axiosPublic.post("/users" , userInfo).then((response)=> {
+                console.log(response);
+                console.log(user);
+                Swal.fire({
+                    title:"SignUp google account successfully",
+                    icon:"success",
+                    timer:1500
+                })
+                navigate(from, { replace: true })
+            })
+        
         document.getElementById("login").close();
       })
       .catch((error) => {
@@ -45,7 +61,7 @@ const Modal = ({ name }) => {
       });
   };
   return (
-    <dialog id={name} className="modal">
+    <dialog id={nameModal} className="modal">
       <div className="modal-box">
         <div className="modal-action mt-0 flex flex-col justify-center ">
           <form
